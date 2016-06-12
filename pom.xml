@@ -40,7 +40,7 @@
           	</descriptorRefs>
 	        <archive>
 	          <manifest>
-	            <mainClass>eu.ibacz.o2sk.reporting.Main</mainClass>
+	            <mainClass>eu.ibacz.o2sk.app.Main</mainClass>
 	          </manifest>
 	        </archive>
         </configuration>

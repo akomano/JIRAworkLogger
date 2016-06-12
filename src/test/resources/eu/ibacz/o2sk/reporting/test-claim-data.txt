@@ -1,0 +1,10 @@
+#
+28.4.2016
+SP 6318161; 30m; Analyza problemu
+Incident 104886; 3h 30m; Reseni incidentu
+SP 6523450; 2h 10m; 
+
+29.4.2016
+Incident 104567; 20m; Analyza incidentu
+SP 6534125; 1h 15m; analyza
+MVP-3507; 

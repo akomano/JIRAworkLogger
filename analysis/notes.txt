@@ -1,0 +1,19 @@
+Format dat vstupneho suboru
+	1. za den mame nekolik ticketu ktere resime
+	2. vime vetsinou ID SP, nebo pripadne MVP ticket (pro SP?)
+	3. popis prace neni nutny
+	4. ID ticketu muze mit vice tvaru: MVP-xyz, SP xxxxx, SPyyyyy, Incident xyz, zaroven aktualne ma SP 7 znaku, a ID ticketu muze byt kapitalkami nebo malym pismem
+	5. vykazovani incidentu ma jiny schema, nez SP, a rezie
+		- incidenty - zalozeni noveho MVP ticketu typu incident (ticket ma ID incidentu v description)
+		- SP subtask
+		- rezie - claim prijmo na MVP ticket
+	
+Format by mohl vypadat nasledovne:
+	28.4.2016
+	SP 6318161; 30m; Analyza problemu
+	Incident 104886; 3h 30m; Reseni incidentu
+	SP 6523450; 2h 10m; 
+	
+	29.4.2016
+	Incident 104567; 20m; Analyza incidentu
+	SP 6534125; 1h 15m; analyza
