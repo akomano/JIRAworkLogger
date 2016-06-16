@@ -17,3 +17,24 @@ Format by mohl vypadat nasledovne:
 	29.4.2016
 	Incident 104567; 20m; Analyza incidentu
 	SP 6534125; 1h 15m; analyza
+	
+	
+	
+	
+	
+	
+	
+	
+	
+Prototyp:
+	main(String[] params) {
+		ClaimFileParser parser = new ClaimFileParser(params[1]);
+		
+		List<JiraTicketClaim> effort = parser.parseEffort();
+		
+		JiraHandler handler = new JiraHandler();
+		
+		for (JiraTicketClaim claim: effort) {
+			claim.processClaim(handler);
+		}
+	}

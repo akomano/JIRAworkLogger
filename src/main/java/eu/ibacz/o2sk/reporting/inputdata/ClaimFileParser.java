@@ -1,4 +1,4 @@
-package eu.ibacz.o2sk.reporting;
+package eu.ibacz.o2sk.reporting.inputdata;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,15 +8,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.joda.time.Period;
-
-import eu.ibacz.o2sk.jiradata.Effort;
-import eu.ibacz.o2sk.jiradata.JiraTicketClaim;
-
-import static eu.ibacz.o2sk.reporting.ClaimConstants.SDF;
+import eu.ibacz.o2sk.jiradata.JiraClaim;
+import eu.ibacz.o2sk.jiradata.JiraClaimBuilder;
 
 public class ClaimFileParser
 {
@@ -27,58 +22,61 @@ public class ClaimFileParser
         file = file2parse;
     }
     
-    public List<JiraTicketClaim> parseEffort() throws IOException {
+    public List<JiraClaim> parseEffort(JiraClaimBuilder builder) throws IOException, ParseException {
         
-        List<JiraTicketClaim> results = new ArrayList<JiraTicketClaim>();
+        List<JiraClaim> results = new ArrayList<JiraClaim>();
         
-        Date lastDate = null;
+        String lastDate = null;
         List<String> fileLines = null;
-        LineObject claimLine = null;
-        Effort e = null;
-        JiraTicketClaim jiraTicketClaim = null;
+        
+        int currentLine = 0;
+        
         try
         {
             fileLines = getLines( file );
             for ( String line :  fileLines) {
-                if ("".equals( line.trim() )) {
-                    // new line start section for new day 
+            	
+            	++currentLine;
+            	
+            	if ( line.trim().startsWith( "#" )) {                    
+                    // just ignore it
+                } else if ("".equals( line.trim() )) {
+                    /* new line start section for new day */ 
+                    // so, reset date 
                     lastDate = null;
-                } else {
-                	try {
-						claimLine = parseLine(line);
-					} catch (ParseException e1) {
-						e1.printStackTrace();
-					}
-                }                	
-                
-                if ( (claimLine) instanceof ClaimDate ) {
-                    lastDate = claimLine.getEffortDate();
-                } else if ( claimLine instanceof Claim ) {
-                    e = new Effort( lastDate, claimLine.getSpentTime(), claimLine.getWorkDescription() );
+                } else {                	                
+                	// process not empty line
+                	
+                    String[] fragments = line.split( ";" );                        
                     
-                    if (claimLine.getTicketId()!=null && claimLine.getTicketId().substring( 0, 3 ).equalsIgnoreCase( "MVP" )) {
-                        // we have MVP ticked parsed
-                        List<Effort> l = new ArrayList<Effort>();
-                        l.add( e );                    
-                        
-                        // take MVP ID and effort
-                        jiraTicketClaim = new JiraTicketClaim(l, claimLine.ticketId!=null ? claimLine.getTicketId() : null, null, claimLine.getWorkDescription() );
-                        results.add( jiraTicketClaim );
-                        
-                    } else if (claimLine.getTicketId()!=null && claimLine.getTicketId().substring( 0, 2 ).equalsIgnoreCase( "SP" )) {
-                        List<Effort> l = new ArrayList<Effort>();
-                        l.add( e );                    
-                        
-                        // tak SP ID and related MVP will be found later
-                        jiraTicketClaim = new JiraTicketClaim(l, null, claimLine.getTicketId(), claimLine.getWorkDescription() );
-                        results.add( jiraTicketClaim );
+                    /* expect split returned 
+                	 * String array of 1..n items
+                	 * because of check for not empty/blank String at input 
+                	 */
+                    if (fragments.length > 1) {
+                    	// at least one ";" >> consider it day work claim
+                    	builder.addWork(fragments);
+                        // and build and store result in cache
+                        results.add( builder.build() );
+                    } else {
+                        // no ";" >> split returns line >> threat it as date
+                    	// if previous line was empty
+                    	if (lastDate == null) {
+                    		lastDate = fragments[0];
+                            try {
+								builder.addDate(lastDate);
+							} catch (ParseException e) {								
+								e.printStackTrace();
+								throw new ParseException("Error while parsing file for date from string: " 
+										+ lastDate, currentLine);
+							}
+                    	}                    	
                     }                    
-                }
+                }              
             }
         }
         catch ( FileNotFoundException fnfe )
         {
-            // TODO Auto-generated catch block
             fnfe.printStackTrace();
         }
         
@@ -99,9 +97,7 @@ public class ClaimFileParser
                 /* take just regular lines, which means empty lines as well, 
                  * since empty line is day delimiter
                  */
-                if ( !line.trim().startsWith( "#" )) {                    
-                    lines.add( line );
-                }                
+            	lines.add( line );                                
             }
         }
         catch ( IOException e )
@@ -116,6 +112,7 @@ public class ClaimFileParser
         return lines;
     }
     
+    /*
     private LineObject parseLine(String line) throws ParseException {
         
         if (line != null && !"".equals(line.trim())) {
@@ -137,7 +134,9 @@ public class ClaimFileParser
         }
         return null;
     }
+    */
     
+    /*
     private class LineObject {
         private String ticketId;
         private Period spentTime;
@@ -172,7 +171,7 @@ public class ClaimFileParser
         }
         
     }
-    
+    */
     
 
 }

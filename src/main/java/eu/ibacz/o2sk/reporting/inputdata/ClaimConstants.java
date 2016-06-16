@@ -1,7 +1,7 @@
 /**
  * 
  */
-package eu.ibacz.o2sk.reporting;
+package eu.ibacz.o2sk.reporting.inputdata;
 
 import java.text.SimpleDateFormat;
 
