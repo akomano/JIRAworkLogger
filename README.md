@@ -11,7 +11,7 @@ date
 task ID; time spent; <work description>
 another task ID; time spent; <work description>
 
-empty line as day delimiter
+#empty line as day delimiter
 date2
 task ID; time spent; <work description>
 another task ID; time spent; <work description>
