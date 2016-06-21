@@ -8,7 +8,7 @@
  * =========================================================================== */
 package eu.ibacz.o2sk.jiradata;
 
-import eu.ibacz.o2sk.webdriver.JiraHandler;
+import eu.ibacz.o2sk.webdriver.jira.JiraClaimer;
 
 /**
  * 
@@ -23,7 +23,18 @@ public class JiraClaimRezie extends JiraClaim {
 	}
 
 	@Override
-	public void processClaim(JiraHandler handler) {
-		System.out.println("processClaim: JiraClaimRezie");
-	}    	
+	public void processClaim(JiraClaimer handler) {
+		System.out.println("processClaim: JiraClaimRezie: " + this.toString());
+	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("[id: ").append(getJiraTicketId())
+			.append(", ")
+			.append(getWorklog())
+			.append("]");
+		
+		return sb.toString();
+	}
 }

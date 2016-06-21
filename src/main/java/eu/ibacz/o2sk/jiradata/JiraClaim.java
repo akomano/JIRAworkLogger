@@ -8,7 +8,7 @@
  * =========================================================================== */
 package eu.ibacz.o2sk.jiradata;
 
-import eu.ibacz.o2sk.webdriver.JiraHandler;
+import eu.ibacz.o2sk.webdriver.jira.JiraClaimer;
 
 /**
  * @author jjamrich
@@ -36,19 +36,7 @@ public abstract class JiraClaim {
         this.description = description;
     }
     
-    public abstract void processClaim(JiraHandler handler);
-    
-    public JiraClaim getCopy() {
-    	JiraClaim jiraClaim = null;
-    	try {
-			jiraClaim = (JiraClaim) this.clone();
-			return jiraClaim;
-			
-		} catch (CloneNotSupportedException e) {
-			System.err.println("There is no clone() suported on " + this.getClass() + ", making copy by myself.");
-			return new JiraClaimSP(this.jiraTicketId, this.summary, this.description, this.worklog);
-		}
-    }
+    public abstract void processClaim(JiraClaimer handler);
     
     /**
      * @return the summary

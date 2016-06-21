@@ -8,7 +8,7 @@
  * =========================================================================== */
 package eu.ibacz.o2sk.jiradata;
 
-import eu.ibacz.o2sk.webdriver.JiraHandler;
+import eu.ibacz.o2sk.webdriver.jira.JiraClaimer;
 
 /**
  * @author jan.jamrich@ibacz.eu
@@ -25,7 +25,19 @@ public class JiraClaimMvpTask extends JiraClaim {
 	}
 
 	@Override
-	public void processClaim(JiraHandler handler) {
-		System.out.println("processClaim: JiraClaimMvpTask");
-	}    	
+	public void processClaim(JiraClaimer handler) {
+		System.out.println("processClaim: JiraClaimMvpTask: " + this.toString());
+	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("[id: ").append(getJiraTicketId())
+			.append(", summary: ").append(getSummary())
+			.append(", desc: ").append(getDescription()).append(" ")
+			.append(getWorklog())
+			.append("]");
+		
+		return sb.toString();
+	}
 }

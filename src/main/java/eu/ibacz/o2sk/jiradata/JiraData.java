@@ -34,10 +34,25 @@ public class JiraData {
         return System.getProperty( prop, properties.getProperty( prop ));
     }
     
-    private JiraData() throws IOException {
-        InputStream is = this.getClass().getResource("jira.properties").openStream();
-        properties.load( is );
-        is.close();
+    private JiraData() {
+    	
+        InputStream is = null;
+		try {
+			is = this.getClass().getResource("jira.properties").openStream();
+			properties.load( is );	        
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err.println("Cannot load jira.properties resource. Use default values instead.");
+		} finally {
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}			
+		}
+        
         
         setLogin( getProp( "jira.login" ) );        
         setPassword( getProp( "jira.password" ) );
@@ -51,7 +66,7 @@ public class JiraData {
         
     }
     
-    public static JiraData getJiraProp() throws IOException {
+    public static JiraData getJiraProp() {
         return new JiraData();
     }
 

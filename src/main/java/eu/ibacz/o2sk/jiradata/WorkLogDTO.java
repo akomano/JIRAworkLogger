@@ -11,6 +11,7 @@ package eu.ibacz.o2sk.jiradata;
 import java.util.Date;
 
 import org.joda.time.Period;
+import static eu.ibacz.o2sk.reporting.inputdata.ClaimConstants.periodFormatter;
 
 /**
  * @author jan.jamrich@ibacz.eu
@@ -50,5 +51,15 @@ public class WorkLogDTO {
 
 	public void setWorkDescription(String workDescription) {
 		this.workDescription = workDescription;
+	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("[On ").append(dateStarted);
+		sb.append(" spent ").append(timeSpent != null ? timeSpent.toString(periodFormatter) : "nothing");
+	    sb.append(" by ").append(workDescription).append("]");
+		
+		return sb.toString();
 	}
 }
