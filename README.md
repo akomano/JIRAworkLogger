@@ -6,6 +6,7 @@ Basic idea behind is that export and format daily effort from personal time trac
 
 Input file format is as simple as can be:
 
+{code}
 date
 task ID; time spent; <work description>
 another task ID; time spent; <work description>
@@ -14,3 +15,4 @@ another task ID; time spent; <work description>
 date2
 task ID; time spent; <work description>
 another task ID; time spent; <work description>
+{code}
