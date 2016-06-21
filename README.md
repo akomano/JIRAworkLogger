@@ -1,4 +1,4 @@
-# mvpreport
+# JIRA Work Logger
 [Selenium WebDriver](http://www.seleniumhq.org/projects/webdriver/) based tool for daily effort claiming to JIRA from simple formatted text file
 
 Short story: Our team (od application support specialist) claims work to our customer's JIRA. While avarage team member works on 5-15 tasks per day, and claiming work on JIRA is no pleasure work, here the tool become on scene.
