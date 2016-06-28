@@ -10,7 +10,7 @@ package eu.ibacz.o2sk.jiradata;
 
 import static eu.ibacz.o2sk.jiradata.JiraData.getJiraProp;
 import static eu.ibacz.o2sk.reporting.inputdata.ClaimConstants.SDF;
-import static eu.ibacz.o2sk.reporting.inputdata.ClaimConstants.periodFormatter;
+import static eu.ibacz.o2sk.reporting.inputdata.ClaimConstants.PERIOD_FORMATTER;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -55,7 +55,7 @@ public class JiraClaimBuilder {
 		JiraClaim c = null;
 		// time spent on task is always second field
 		// TODO JJa: implementovat osetrenie chyby pri parsovani (IlleagalArgumentException)
-		Period spentTime = periodFormatter.parsePeriod(workLine[1].trim());
+		Period spentTime = PERIOD_FORMATTER.parsePeriod(workLine[1].trim());
 		
 		if (workLine[0].startsWith("SP")) {
 			c = new JiraClaimSP(getJiraProp().getParentTicketIdSP(), workLine[0], null, 

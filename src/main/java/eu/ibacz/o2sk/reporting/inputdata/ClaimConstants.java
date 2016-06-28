@@ -16,7 +16,7 @@ public class ClaimConstants {
 	
 	public static final String DATE_FORMAT = "dd.MM.yyyy";
 	public static final SimpleDateFormat SDF = new SimpleDateFormat(DATE_FORMAT);
-	public static final PeriodFormatter periodFormatter = new PeriodFormatterBuilder()
+	public static final PeriodFormatter PERIOD_FORMATTER = new PeriodFormatterBuilder()
             .appendDays().appendSuffix("d ")
             .appendHours().appendSuffix("h ")
             .appendMinutes().appendSuffix("m")

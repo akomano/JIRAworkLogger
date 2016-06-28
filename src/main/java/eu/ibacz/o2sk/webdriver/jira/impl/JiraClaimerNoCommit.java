@@ -17,7 +17,7 @@ import eu.ibacz.o2sk.jiradata.WorkLogDTO;
 import eu.ibacz.o2sk.webdriver.jira.BasicJiraOperation;
 import eu.ibacz.o2sk.webdriver.jira.JiraClaimer;
 
-import static eu.ibacz.o2sk.reporting.inputdata.ClaimConstants.periodFormatter;
+import static eu.ibacz.o2sk.reporting.inputdata.ClaimConstants.PERIOD_FORMATTER;
 import static eu.ibacz.o2sk.reporting.inputdata.ClaimConstants.SDF;
 
 /**
@@ -45,7 +45,7 @@ public class JiraClaimerNoCommit implements JiraClaimer {
         
         WebElement CancelBtn = driver.findElement( By.id( "log-work-cancel" ) );
         
-        timeSpent.sendKeys(workLog.getTimeSpent().toString( periodFormatter ));        
+        timeSpent.sendKeys(workLog.getTimeSpent().toString( PERIOD_FORMATTER ));        
         // need to rewrite existing default value
         dateStarted.sendKeys(Keys.HOME,Keys.chord(Keys.SHIFT,Keys.END), SDF.format(workLog.getDateStarted()));       
         workDescription.sendKeys( workLog.getWorkDescription() );
