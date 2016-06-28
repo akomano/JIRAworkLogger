@@ -1,4 +1,7 @@
-set JAVA_CLASSPATH="c:\Program Files\Java\jdk1.7.0_21\bin"
-set PATH=%JAVA_CLASSPATH%;%PATH%
-set CHROME_DRIVER_PATH=C:\Apps\selenium-wd-drivers\chrome\chromedriver.exe
-java %* -Dwebdriver.chrome.driver=%CHROME_DRIVER_PATH% -jar target/mvpreport-1.0-SNAPSHOT-jar-with-dependencies.jar "C:\Users\jjamrich\myProjects\mvpreport\src\test\resources\eu\ibacz\o2sk\reporting\test-claim-data.txt"
+@echo off
+call export_local_env.bat
+echo CHROME_DRIVER_PATH: %CHROME_DRIVER_PATH%
+echo PATH_TO_INPUT_FILE: %PATH_TO_INPUT_FILE%
+echo JVM_PROPS: %JVM_PROPS%
+
+java %JVM_PROPS% -Dwebdriver.chrome.driver=%CHROME_DRIVER_PATH% -jar target/mvpreport-1.0-SNAPSHOT-jar-with-dependencies.jar "%PATH_TO_INPUT_FILE%"

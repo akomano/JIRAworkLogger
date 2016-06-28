@@ -4,3 +4,4 @@
 .project
 .settings**
 run_*.bat
+export_local_env.bat
