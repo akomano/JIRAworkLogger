@@ -17,5 +17,7 @@ import eu.ibacz.o2sk.jiradata.WorkLogDTO;
 public interface JiraClaimer {
 	
 	public void claimWorkLogOnCurrentTicket(WorkLogDTO workLog);
+	
+	public void createSubtaskOfCurrentTicket(String taskSummary);
 
 }

@@ -26,6 +26,7 @@ import eu.ibacz.o2sk.webdriver.jira.BasicJiraOperation;
 import eu.ibacz.o2sk.webdriver.jira.JiraClaimer;
 import eu.ibacz.o2sk.webdriver.jira.impl.BasicJiraOperationImpl;
 import eu.ibacz.o2sk.webdriver.jira.impl.JiraClaimerNoCommit;
+import eu.ibacz.o2sk.webdriver.jira.impl.JiraClaimerWithCommit;
 
 
 /**
@@ -63,7 +64,8 @@ public class Main {
         claimerDryRun.claimWorkLogOnCurrentTicket(new WorkLogDTO(when, howMuch, "Testovaci popis prace"));
         */
         
-        JiraClaimer claimerDryRun = new JiraClaimerNoCommit(d);
+        // JiraClaimer claimerDryRun = new JiraClaimerNoCommit(d);
+        JiraClaimer claimerDryRun = new JiraClaimerWithCommit(d);
         
         if (args.length > 0) {
         	System.out.println("Claimuju ze souboru " + args[0]);
@@ -73,7 +75,7 @@ public class Main {
 				denniClaimy = fileParser.parseEffort(new JiraClaimBuilder());
 				Iterator<JiraClaim> it = denniClaimy.iterator();
 	        	while (it.hasNext()) {
-	        		it.next().processClaim(claimerDryRun);
+	        		it.next().processClaim(claimerDryRun, new BasicJiraOperationImpl(d));
 	        	}
 			} catch (ParseException e) {
 				e.printStackTrace();

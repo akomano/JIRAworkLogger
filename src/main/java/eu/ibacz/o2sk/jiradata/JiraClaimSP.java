@@ -8,6 +8,15 @@
  * =========================================================================== */
 package eu.ibacz.o2sk.jiradata;
 
+import static eu.ibacz.o2sk.jiradata.JiraData.getJiraProp;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.thoughtworks.selenium.webdriven.commands.WaitForCondition;
+
+import eu.ibacz.o2sk.webdriver.jira.BasicJiraOperation;
 import eu.ibacz.o2sk.webdriver.jira.JiraClaimer;
 
 /**
@@ -21,8 +30,29 @@ public class JiraClaimSP extends JiraClaim {
 	}
 
 	@Override
-	public void processClaim(JiraClaimer handler) {
+	public void processClaim(JiraClaimer handler, BasicJiraOperation jiraHandler) {
 		System.out.println("processClaim: JiraClaimSP: " + this.toString());
+		// SP are claimed in subtask of MVP ticket valid for whole month
+		jiraHandler.open(getJiraProp().getJiraURLbrowseTicket() + "/" + getJiraProp().getParentTicketIdSP());
+		
+		if (jiraHandler.getElementsByPartialLinkText(getSummary()).size()==0) {
+			
+			System.out.println("No subtask exists for " + getSummary());
+			
+			handler.createSubtaskOfCurrentTicket(getSummary());
+			
+			// and refresh page (to get newly created issue appear in the list)
+			jiraHandler.open(getJiraProp().getJiraURLbrowseTicket() + "/" + getJiraProp().getParentTicketIdSP());
+		}
+		
+		if (jiraHandler.getElementsByPartialLinkText(getSummary()).size() == 1) {
+			System.out.println("Claim effort on " + getSummary());
+			jiraHandler.clickOnLink(getSummary());
+			// TODO JJa: add waiting for page load (subtask detail)
+			handler.claimWorkLogOnCurrentTicket(getWorklog());
+		} else {
+			System.out.println("Still unable to claim effort on " + getSummary() + ". No subtask exists.");
+		}
 	}
 	
 	public String toString() {

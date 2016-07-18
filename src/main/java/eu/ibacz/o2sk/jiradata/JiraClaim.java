@@ -8,6 +8,7 @@
  * =========================================================================== */
 package eu.ibacz.o2sk.jiradata;
 
+import eu.ibacz.o2sk.webdriver.jira.BasicJiraOperation;
 import eu.ibacz.o2sk.webdriver.jira.JiraClaimer;
 
 /**
@@ -36,7 +37,7 @@ public abstract class JiraClaim {
         this.description = description;
     }
     
-    public abstract void processClaim(JiraClaimer handler);
+    public abstract void processClaim(JiraClaimer handler, BasicJiraOperation jiraHandler);
     
     /**
      * @return the summary

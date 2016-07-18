@@ -8,6 +8,7 @@
  * =========================================================================== */
 package eu.ibacz.o2sk.jiradata;
 
+import eu.ibacz.o2sk.webdriver.jira.BasicJiraOperation;
 import eu.ibacz.o2sk.webdriver.jira.JiraClaimer;
 
 /**
@@ -25,7 +26,7 @@ public class JiraClaimMvpIncident extends JiraClaim {
 	}
 
 	@Override
-	public void processClaim(JiraClaimer handler) {
+	public void processClaim(JiraClaimer handler, BasicJiraOperation jiraHandler) {
 		System.out.println("processClaim: JiraClaimMvpIncident: " + this.toString());
 	}
 	

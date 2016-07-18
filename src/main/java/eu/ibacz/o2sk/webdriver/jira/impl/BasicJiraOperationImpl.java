@@ -10,6 +10,8 @@ package eu.ibacz.o2sk.webdriver.jira.impl;
 
 import static eu.ibacz.o2sk.jiradata.JiraData.getJiraProp;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -56,7 +58,8 @@ public class BasicJiraOperationImpl implements BasicJiraOperation {
 	
 	public void logIn() {
         
-        driver.findElement(By.linkText( "Log In" )).click();
+        // driver.findElement(By.linkText( "Log In" )).click();
+		clickOnLink("Log In");
         
         (new WebDriverWait(driver, 5)).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -106,6 +109,16 @@ public class BasicJiraOperationImpl implements BasicJiraOperation {
 	@Override
 	public void closeBrowser() {
 		driver.close();
+	}
+
+	@Override
+	public void clickOnLink(String label) {
+		driver.findElement(By.linkText(label)).click();		
+	}
+
+	@Override
+	public List<WebElement> getElementsByPartialLinkText(String text) {
+		return driver.findElements(By.partialLinkText(text));
 	}
 
 }

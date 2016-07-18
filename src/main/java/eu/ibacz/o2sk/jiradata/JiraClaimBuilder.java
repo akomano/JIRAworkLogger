@@ -8,15 +8,11 @@
  * =========================================================================== */
 package eu.ibacz.o2sk.jiradata;
 
-import static eu.ibacz.o2sk.jiradata.JiraData.getJiraProp;
-import static eu.ibacz.o2sk.reporting.inputdata.ClaimConstants.SDF;
-import static eu.ibacz.o2sk.reporting.inputdata.ClaimConstants.PERIOD_FORMATTER;
+import static eu.ibacz.o2sk.reporting.inputdata.ClaimConstants.SDF_DATE;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
-
-import org.joda.time.Period;
 
 /**
  * @author jjamrich
@@ -26,9 +22,11 @@ public class JiraClaimBuilder {
 	
 	private Date date;
 	private String[] workLine;
+	private JiraClaimTypeFactory claimFactory = new JiraClaimTypeFactory();
 	
 	public JiraClaimBuilder addDate(String date) throws ParseException {
-		this.date = SDF.parse(date);
+		
+		this.date = SDF_DATE.parse(date);
 		return this;
 	}
 	
@@ -42,36 +40,8 @@ public class JiraClaimBuilder {
 	}
 		
 	public JiraClaim build() throws IOException {
-		System.out.println("claim for date: " + date);
-		return getClaimFromWorkLine(workLine);
+		System.out.println("Building claim for date: " + date);
+		return claimFactory.getClaimFromWorkLine(workLine, date);
 	}
-	
-	private JiraClaim getClaimFromWorkLine(String[] workLine) throws IOException {
-		// TODO JJa: implements logic on the top of WorkLine
-		/*
-		 * if (workLine.legth == 3) then
-		 * if (workLine[0].startsWith("MVP-") and workLine[0].containsIgnoreCase("incident") then ...
-		 */
-		JiraClaim c = null;
-		// time spent on task is always second field
-		// TODO JJa: implementovat osetrenie chyby pri parsovani (IlleagalArgumentException)
-		Period spentTime = PERIOD_FORMATTER.parsePeriod(workLine[1].trim());
 		
-		if (workLine[0].startsWith("SP")) {
-			c = new JiraClaimSP(getJiraProp().getParentTicketIdSP(), workLine[0], null, 
-					new WorkLogDTO(date, spentTime, "Prace na SP"));
-		} else if (workLine[0].startsWith("Incident")) {
-			c = new JiraClaimMvpIncident(null, workLine[0], 
-					new WorkLogDTO(date, spentTime, "Reseni incidentu"));
-		} else if (workLine[0].startsWith("MVP-")) {
-			c = new JiraClaimMvpTask(workLine[0], null, workLine.length > 2 ? workLine[2] : "", 
-					new WorkLogDTO(date, spentTime, ""));
-		} else {
-			c = new JiraClaimRezie(getJiraProp().getParentTicketIdRezie(), 
-					new WorkLogDTO(date, spentTime, "Prace na vykazovacim nastroji"));
-		}
-		
-		return c;
-	}
-	
 }

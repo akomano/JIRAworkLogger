@@ -8,6 +8,9 @@
  * =========================================================================== */
 package eu.ibacz.o2sk.jiradata;
 
+import static eu.ibacz.o2sk.jiradata.JiraData.getJiraProp;
+
+import eu.ibacz.o2sk.webdriver.jira.BasicJiraOperation;
 import eu.ibacz.o2sk.webdriver.jira.JiraClaimer;
 
 /**
@@ -25,8 +28,9 @@ public class JiraClaimDev extends JiraClaim {
 	}
 
 	@Override
-	public void processClaim(JiraClaimer handler) {
+	public void processClaim(JiraClaimer handler, BasicJiraOperation jiraHandler) {
 		System.out.println("processClaim: JiraClaimDev: " + this.toString());
+		jiraHandler.open(getJiraProp().getJiraURLbrowseTicket() + "/" + getJiraTicketId());
 		handler.claimWorkLogOnCurrentTicket(getWorklog());
 	}
 	

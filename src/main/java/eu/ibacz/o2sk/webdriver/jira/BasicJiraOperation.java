@@ -8,6 +8,10 @@
  * =========================================================================== */
 package eu.ibacz.o2sk.webdriver.jira;
 
+import java.util.List;
+
+import org.openqa.selenium.WebElement;
+
 /**
  * @author jan.jamrich@ibacz.eu
  *
@@ -18,6 +22,9 @@ public interface BasicJiraOperation {
 	public void closeBrowser();
 	
 	public void openWorkLogDialog();
+	
+	public void clickOnLink(String label);
+	public List<WebElement> getElementsByPartialLinkText(String text);
 	    
     public void logOff();    
     public void logIn();

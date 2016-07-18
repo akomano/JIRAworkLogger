@@ -62,7 +62,8 @@ public class ClaimFileParser
                         // no ";" >> split returns line >> threat it as date
                     	// if previous line was empty
                     	if (lastDate == null) {
-                    		lastDate = fragments[0];
+                    		// element containing date should contains comment (starting by "#"), as well as empty space
+                    		lastDate = fragments[0].split("#")[0].trim();
                             try {
 								builder.addDate(lastDate);
 							} catch (ParseException e) {								
