@@ -36,7 +36,7 @@ public class BasicJiraOperationImpl implements BasicJiraOperation {
 	public void openWorkLogDialog() {
 		WebElement moreBtn = driver.findElement( By.id("opsbar-operations_more") );
         WebElement logWorkBtn = driver.findElement( By.id( "log-work" ) );
-        
+        /*
         moreBtn.click();
         
         getDefaultWDWait().until(new ExpectedCondition<Boolean>() {
@@ -45,7 +45,7 @@ public class BasicJiraOperationImpl implements BasicJiraOperation {
                 return d.findElement( By.id( "log-work" ) ).isDisplayed();
             }
         });
-        
+        */
         logWorkBtn.click();
         
         getDefaultWDWait().until(new ExpectedCondition<Boolean>() {
@@ -79,8 +79,7 @@ public class BasicJiraOperationImpl implements BasicJiraOperation {
  
         (new WebDriverWait(driver, 10)).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
-                // return d.getTitle().toLowerCase().startsWith("cheese!");
-                return d.getTitle().toLowerCase().startsWith( "mvp" );
+                return d.getTitle().startsWith( "O2SK: Support dashboard" );
             }
         });
         
