@@ -16,6 +16,8 @@ import java.text.ParseException;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 
 import eu.ibacz.o2sk.jiradata.JiraClaim;
@@ -34,65 +36,59 @@ import eu.ibacz.o2sk.webdriver.jira.impl.JiraClaimerWithCommit;
  *
  */
 public class Main {
+	
+	private static final Logger log = LogManager.getLogger(Main.class);
     
     public static void main( String[] args ) throws IOException {
     	
-    	// WebDriver d = WebDriverFactory.getFirefoxDriver();
-    	WebDriver d = WebDriverFactory.getChromeDriver();
-    	
+    	log.info("Start JIRA Logger application");
+    	    	
     	if (args.length == 0) {
-    		System.out.println("Ocekavam parametr s cestou k souboru s vykazy. Jinak vyclaimuju pouze fake Rezii.");    		
+    		log.warn("Expecting file name param containing claims");    		    		
     	}
-        
-        System.out.println("Oteviram JIRA.");
-        BasicJiraOperation jira = new BasicJiraOperationImpl(d);
-        
-        jira.open(getJiraProp().getJiraURL());
-        
-        if (! jira.isLoggedIn()) {
-            System.out.println("Prihlasuju se jako " + getJiraProp().getLogin());
-            jira.logIn();
-        }
-        
-        /*
-        // Claiming logic
 
-        System.out.println("Zkousim vyclaimovat Rezii");
-        Date when = new Date(System.currentTimeMillis()); // sdf.parse( "2016.04.29 17:00" );
-        Period howMuch = new Period( 10*60*1000, PeriodType.minutes() );
-        JiraClaimer claimerDryRun = new JiraClaimerNoCommit(d);
-        claimerDryRun.claimWorkLogOnCurrentTicket(new WorkLogDTO(when, howMuch, "Testovaci popis prace"));
-        */
-        
-        // JiraClaimer claimerDryRun = new JiraClaimerNoCommit(d);
-        JiraClaimer claimerDryRun = new JiraClaimerWithCommit(d);
-        
+    	BasicJiraOperation jira = null;
+    	
         if (args.length > 0) {
-        	System.out.println("Claimuju ze souboru " + args[0]);
+        	log.info("Use following file as data source: " + args[0]);
         	ClaimFileParser fileParser = new ClaimFileParser(new File(args[0]));
         	List<JiraClaim> denniClaimy;
 			try {
+				// parsing assert input data validation 
 				denniClaimy = fileParser.parseEffort(new JiraClaimBuilder());
+				
+				// WebDriver d = WebDriverFactory.getFirefoxDriver();
+		    	WebDriver d = WebDriverFactory.getChromeDriver();
+				jira = new BasicJiraOperationImpl(d);
+				log.info("Opening JIRA");		        
+		        jira.open(getJiraProp().getJiraURL());
+		        
+		        if (! jira.isLoggedIn()) {
+		            log.info("Sign in as " + getJiraProp().getLogin());
+		            jira.logIn();
+		        }
+				
 				Iterator<JiraClaim> it = denniClaimy.iterator();
 	        	while (it.hasNext()) {
-	        		it.next().processClaim(claimerDryRun, new BasicJiraOperationImpl(d));
+	        		it.next().processClaim(new JiraClaimerWithCommit(d), new BasicJiraOperationImpl(d));
 	        	}
+	        	
+	        	if (jira.isLoggedIn()) {
+	                log.info("Log out");
+	                jira.logOff();
+	            }
+	            	            
 			} catch (ParseException e) {
-				e.printStackTrace();
-				System.err.println("Parsovanie vstupneho suboru sa nepodarilo.");
-			}        	
+				log.error("Error while parsing source file. " + e);
+			} finally {				
+				if (jira != null) {
+					log.info("Closing browser.");
+					jira.closeBrowser();
+				}
+			}
+    	} else {
+    		log.info("No params with input data file given, nothing to do");
     	}
-        
-        System.out.println("Oteviram JIRA ticket " + getJiraProp().getParentTicketIdSP());
-        jira.open(getJiraProp().getJiraURLbrowseTicket() + getJiraProp().getParentTicketIdSP());
-        
-        if (jira.isLoggedIn()) {
-            System.out.println("Odhlasuju se");
-            jira.logOff();
-        }
-        
-        System.out.println("Zaviram prohlizec");
-        jira.closeBrowser();
 
     }
 

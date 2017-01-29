@@ -12,6 +12,8 @@ import static eu.ibacz.o2sk.jiradata.JiraData.getJiraProp;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -26,6 +28,7 @@ import eu.ibacz.o2sk.webdriver.jira.BasicJiraOperation;
  */
 public class BasicJiraOperationImpl implements BasicJiraOperation {
 	
+	private static final Logger log = LogManager.getLogger(BasicJiraOperationImpl.class);
 	private WebDriver driver;
 	
 	public BasicJiraOperationImpl(WebDriver driver) {
@@ -34,10 +37,7 @@ public class BasicJiraOperationImpl implements BasicJiraOperation {
 	
 	@Override
 	public void openWorkLogDialog() {
-		WebElement moreBtn = driver.findElement( By.id("opsbar-operations_more") );
-        WebElement logWorkBtn = driver.findElement( By.id( "log-work" ) );
-        /*
-        moreBtn.click();
+		WebElement logWorkBtn = driver.findElement( By.id( "log-work" ) );
         
         getDefaultWDWait().until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -45,7 +45,7 @@ public class BasicJiraOperationImpl implements BasicJiraOperation {
                 return d.findElement( By.id( "log-work" ) ).isDisplayed();
             }
         });
-        */
+
         logWorkBtn.click();
         
         getDefaultWDWait().until(new ExpectedCondition<Boolean>() {
@@ -79,7 +79,8 @@ public class BasicJiraOperationImpl implements BasicJiraOperation {
  
         (new WebDriverWait(driver, 10)).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
-                return d.getTitle().startsWith( "O2SK: Support dashboard" );
+                return d.getTitle().startsWith( "MVP: IBA Status Meeting" )
+                		|| d.getTitle().startsWith( "O2SK: Support dashboard" );
             }
         });
         
@@ -88,7 +89,7 @@ public class BasicJiraOperationImpl implements BasicJiraOperation {
 	public boolean isLoggedIn() {
         // since expectiong more users, it would be more reliable checking "not logged in" status instead of check logged user name
         boolean isLoggedIn = driver.findElement( By.id( "user-options" ) ).findElements( By.linkText( "Log In" ) ).size() == 0;
-        System.out.println("isLoggedIn() <- " + isLoggedIn );
+        log.info("isLoggedIn() <- " + isLoggedIn );
         return isLoggedIn;
     }
     
@@ -113,6 +114,18 @@ public class BasicJiraOperationImpl implements BasicJiraOperation {
 	@Override
 	public void clickOnLink(String label) {
 		driver.findElement(By.linkText(label)).click();		
+	}
+	
+	@Override
+	public void clickOnSPLink(String label) {
+		driver.findElement(By.linkText(label)).click();
+		
+		(new WebDriverWait(driver, 15)).until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver d) {
+                return d.findElement(By.cssSelector("H1#summary-val")).getText().startsWith("SP")
+                		&& d.findElement(By.cssSelector("span#type-val")).getText().trim().equalsIgnoreCase("Sub-task");
+            }
+        });
 	}
 
 	@Override

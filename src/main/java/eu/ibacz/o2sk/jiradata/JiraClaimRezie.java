@@ -10,6 +10,9 @@ package eu.ibacz.o2sk.jiradata;
 
 import static eu.ibacz.o2sk.jiradata.JiraData.getJiraProp;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import eu.ibacz.o2sk.webdriver.jira.BasicJiraOperation;
 import eu.ibacz.o2sk.webdriver.jira.JiraClaimer;
 
@@ -20,6 +23,8 @@ import eu.ibacz.o2sk.webdriver.jira.JiraClaimer;
  */
 public class JiraClaimRezie extends JiraClaim {
 	
+	private static final Logger log = LogManager.getLogger(JiraClaimRezie.class);
+	
 	public JiraClaimRezie( String id, WorkLogDTO workLog) {
 		// since on Rezie is just time spent with description claim, no summary is provided
 		super(id, null, null, workLog);
@@ -27,7 +32,7 @@ public class JiraClaimRezie extends JiraClaim {
 
 	@Override
 	public void processClaim(JiraClaimer handler, BasicJiraOperation jiraHandler) {
-		System.out.println("processClaim: JiraClaimRezie: " + this.toString());
+		log.info("processClaim: JiraClaimRezie: " + this.toString());
 		
 		jiraHandler.open(getJiraProp().getJiraURLbrowseTicket() + "/" + getJiraProp().getParentTicketIdRezie());
 		

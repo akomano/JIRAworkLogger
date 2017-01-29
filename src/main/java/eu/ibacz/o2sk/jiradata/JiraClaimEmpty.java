@@ -8,6 +8,9 @@
  * =========================================================================== */
 package eu.ibacz.o2sk.jiradata;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import eu.ibacz.o2sk.webdriver.jira.BasicJiraOperation;
 import eu.ibacz.o2sk.webdriver.jira.JiraClaimer;
 
@@ -16,6 +19,8 @@ import eu.ibacz.o2sk.webdriver.jira.JiraClaimer;
  *
  */
 public class JiraClaimEmpty extends JiraClaim {
+	
+	private static final Logger log = LogManager.getLogger(JiraClaimEmpty.class);
 
 	public JiraClaimEmpty() {
 		super(null, null, null, new WorkLogDTO(null, null, null));
@@ -27,7 +32,7 @@ public class JiraClaimEmpty extends JiraClaim {
 	 */
 	@Override
 	public void processClaim(JiraClaimer handler, BasicJiraOperation jiraHandler) {
-		System.out.println("processClaim: JiraClaimEmpty: " + this.toString());
+		log.info("processClaim: JiraClaimEmpty: " + this.toString());
 	}
 
 }

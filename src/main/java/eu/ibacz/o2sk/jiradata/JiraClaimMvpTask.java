@@ -10,6 +10,9 @@ package eu.ibacz.o2sk.jiradata;
 
 import static eu.ibacz.o2sk.jiradata.JiraData.getJiraProp;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import eu.ibacz.o2sk.webdriver.jira.BasicJiraOperation;
 import eu.ibacz.o2sk.webdriver.jira.JiraClaimer;
 
@@ -18,6 +21,8 @@ import eu.ibacz.o2sk.webdriver.jira.JiraClaimer;
  *
  */
 public class JiraClaimMvpTask extends JiraClaim {
+	
+	private static final Logger log = LogManager.getLogger(JiraClaimMvpTask.class);
 
 	public JiraClaimMvpTask(String id, String summary, String description, WorkLogDTO worklog) {
 		/**
@@ -29,7 +34,7 @@ public class JiraClaimMvpTask extends JiraClaim {
 
 	@Override
 	public void processClaim(JiraClaimer handler, BasicJiraOperation jiraHandler) {
-		System.out.println("processClaim: JiraClaimMvpTask: " + this.toString());
+		log.info("processClaim: JiraClaimMvpTask: " + this.toString());
 		
 		jiraHandler.open(getJiraProp().getJiraURLbrowseTicket() + "/" + getJiraTicketId());
 		

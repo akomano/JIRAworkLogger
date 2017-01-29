@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * @author jjamrich
  *
@@ -23,6 +26,8 @@ public class JiraClaimBuilder {
 	private Date date;
 	private String[] workLine;
 	private JiraClaimTypeFactory claimFactory = new JiraClaimTypeFactory();
+	
+	private static final Logger log = LogManager.getLogger(JiraClaimBuilder.class);
 	
 	public JiraClaimBuilder addDate(String date) throws ParseException {
 		
@@ -40,7 +45,7 @@ public class JiraClaimBuilder {
 	}
 		
 	public JiraClaim build() throws IOException {
-		System.out.println("Building claim for date: " + date);
+		log.info("Building claim for date: " + date);
 		return claimFactory.getClaimFromWorkLine(workLine, date);
 	}
 		

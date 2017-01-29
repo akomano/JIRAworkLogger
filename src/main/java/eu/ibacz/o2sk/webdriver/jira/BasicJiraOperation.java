@@ -24,6 +24,7 @@ public interface BasicJiraOperation {
 	public void openWorkLogDialog();
 	
 	public void clickOnLink(String label);
+	public void clickOnSPLink(String label);
 	public List<WebElement> getElementsByPartialLinkText(String text);
 	    
     public void logOff();    
