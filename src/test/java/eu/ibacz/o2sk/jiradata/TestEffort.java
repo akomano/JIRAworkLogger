@@ -22,6 +22,7 @@ public class TestEffort
     PeriodFormatter periodFormatter;
     Date when;
     Period howMuch;
+    JiraClaimTypeFactory claimFactory = new JiraClaimTypeFactory();
     
     @Before
     public void setUp()
@@ -53,6 +54,11 @@ public class TestEffort
     {
         assertEquals( "10m", howMuch.toString(periodFormatter) );
         // assertEquals( "10m", periodFormatter.print( howMuch ) );
+        assertEquals(0, Integer.parseInt("00"));
+        
+        assertEquals("13m", claimFactory.parsePeriodFromString("0:13:31").toString(periodFormatter));
+        assertEquals("1h 34m", claimFactory.parsePeriodFromString("1:34:26").toString(periodFormatter));
+        
     }
 
 }

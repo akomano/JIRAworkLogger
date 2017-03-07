@@ -36,13 +36,8 @@ public class JiraClaimTypeFactory {
 				
 		String periodString = trim(workLine[1]);
 		Period spentTime = null;
-		if (periodString.contains("h") && periodString.contains("m")) {
-			spentTime = PERIOD_FORMATTER_HOUR_AND_MINS.parsePeriod(periodString);
-		} else if (periodString.contains("h")) {
-			spentTime = PERIOD_FORMATTER_HOURS.parsePeriod(periodString);
-		} else {
-			spentTime = PERIOD_FORMATTER_MINS.parsePeriod(periodString);
-		}
+		
+		spentTime = parsePeriodFromString(periodString);
 				
 		if (trim(workLine[0]).startsWith("SP")) {		
 			c = new JiraClaimSP(getJiraProp().getParentTicketIdSP(), trim(workLine[0]), null, 
@@ -76,5 +71,28 @@ public class JiraClaimTypeFactory {
 			return s;
 		}
 		return s.trim();
+	}
+	
+	public Period parsePeriodFromString(String spentTimeString) {
+		Period spentTime = null;
+		
+		if (spentTimeString.contains(":")) {
+			// time spent in format hh:mm:ss (or some variant)
+			String[] spentTimeStringFragments = spentTimeString.split(":");
+			int hour = Integer.parseInt(spentTimeStringFragments[0]);
+			int min = Integer.parseInt(spentTimeStringFragments[1]);
+			int sec = Integer.parseInt(spentTimeStringFragments[2]);
+			 
+			spentTime = new Period(hour, min, sec, 0);
+			
+		} else if (spentTimeString.contains("h") && spentTimeString.contains("m")) {
+			spentTime = PERIOD_FORMATTER_HOUR_AND_MINS.parsePeriod(spentTimeString);
+		} else if (spentTimeString.contains("h")) {
+			spentTime = PERIOD_FORMATTER_HOURS.parsePeriod(spentTimeString);
+		} else {
+			spentTime = PERIOD_FORMATTER_MINS.parsePeriod(spentTimeString);
+		}
+		
+		return spentTime;
 	}
 }

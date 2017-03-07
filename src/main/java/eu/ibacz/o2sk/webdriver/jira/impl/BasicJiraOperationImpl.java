@@ -118,7 +118,7 @@ public class BasicJiraOperationImpl implements BasicJiraOperation {
 	
 	@Override
 	public void clickOnSPLink(String label) {
-		driver.findElement(By.linkText(label)).click();
+		driver.findElement(By.partialLinkText(label)).click();
 		
 		(new WebDriverWait(driver, 15)).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
